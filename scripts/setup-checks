@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+
+cd "$(git rev-parse --show-toplevel)"
+hooks=$(git config --get core.hooksPath || true)
+case "$hooks" in
+  ''|.githooks) ;;
+  *) echo "An existing hook manager is set to $hooks. Connect the hooks in .githooks before switching." >&2; exit 1 ;;
+esac
+
+version=8.30.1
+case "$(uname -s)/$(uname -m)" in
+  Darwin/arm64)  platform=darwin_arm64; digest=b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5 ;;
+  Darwin/x86_64) platform=darwin_x64;   digest=dfe101a4db2255fc85120ac7f3d25e4342c3c20cf749f2c20a18081af1952709 ;;
+  Linux/aarch64|Linux/arm64) platform=linux_arm64; digest=e4a487ee7ccd7d3a7f7ec08657610aa3606637dab924210b3aee62570fb4b080 ;;
+  Linux/x86_64)  platform=linux_x64;    digest=551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb ;;
+  *) echo "Use a macOS or Linux checkout (including WSL) to install these hooks." >&2; exit 1 ;;
+esac
+
+tools_dir=$(git rev-parse --git-path ai-hygiene-tools)
+mkdir -p "$tools_dir"
+scratch=$(mktemp -d "$tools_dir/install.XXXXXX")
+trap 'rm -rf "$scratch"' EXIT
+archive="gitleaks_${version}_${platform}.tar.gz"
+curl --proto '=https' --proto-redir '=https' -fsSL --retry 2 \
+  "https://github.com/gitleaks/gitleaks/releases/download/v$version/$archive" -o "$scratch/archive"
+printf '%s  %s\n' "$digest" "$scratch/archive" | shasum -a 256 -c -
+tar -xOzf "$scratch/archive" gitleaks > "$scratch/gitleaks"
+chmod 755 "$scratch/gitleaks"
+mv -f "$scratch/gitleaks" "$tools_dir/gitleaks"
+git config --local core.hooksPath .githooks

@@ -16,3 +16,7 @@ done
 ```
 
 Open `~/.codex/semantics.md` and replace the bracketed prompts with examples in your own words. If you already maintain a guide with the same name, compare it with the repository copy and merge the changes you want. Start a new Codex chat to use your guides.
+
+## Contribute
+
+Run `./scripts/setup-checks` once in your clone to enable the Git hooks. See the [verification and approval steps](CONTRIBUTING.md) before opening a PR.

@@ -13,6 +13,8 @@
 
 ## Verification
 
+When creating a repository, turn these stages into executable hooks and CI suited to the project. Enable the hooks in the working clone, document setup for new clones, and protect the default branch with the verified checks and final human approval. Exercise a passing change and a synthetic failure before handing it over.
+
 1. **Before each commit**, inspect the staged diff. Check formatting and run applicable lint, type checks, and focused tests on that snapshot. For a bug fix, show the regression test failing before the fix and passing afterward. Make one logical change per commit, such as `fix(orders): prevent duplicate orders on retry`. Follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
 
    Scan the staged snapshot for secrets with values redacted. Keep live `.env` files untracked and examples placeholder-only. Inspect changed logging, fixtures, and client code for sensitive data. If input validation or permissions changed, test a request that must be rejected. Fix exposures and failing checks before committing.
