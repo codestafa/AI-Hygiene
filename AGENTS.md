@@ -28,4 +28,5 @@
 ## Communication
 
 - For every explanation, message draft, and email draft, follow `~/.codex/semantics.md`. Read it once per chat and reuse it. Never use em dashes in authored text.
-- In a PR, explain what changed, why, and what verification ran. Mention material risks and recovery steps when relevant. Keep READMEs short with the purpose, the quickest working example, and links to details.
+- In a PR, explain what changed, why, and what verification ran. Mention material risks and recovery steps when relevant.
+- Write each README for a first-time reader. Explain who the project helps, what problem it solves, and how its main pieces fit together. Give one realistic example with the setup it needs and a result the reader can recognize. Match the depth to the project and link to longer explanations where readers need them.
