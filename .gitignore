@@ -1,0 +1,4 @@
+semantics.md
+.env
+.env.*
+!.env.example
